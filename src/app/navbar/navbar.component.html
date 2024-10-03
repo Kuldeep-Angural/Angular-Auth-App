@@ -1,0 +1,36 @@
+<mat-toolbar>
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" [matMenuTriggerFor]="menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="example-spacer"></span>
+  
+  <button *ngIf="isLoggedIn()" mat-icon-button class="example-icon" [matMenuTriggerFor]="profile"  aria-label="Example icon-button with share icon">
+    <mat-icon>person</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-menu #menu="matMenu" >
+  <div class="menuItems">
+    <button class="menu-button" mat-menu-item (click)="yourFirstAction()">
+      First Action
+    </button>
+    <button class="menu-button" mat-menu-item (click)="yourSecondAction()">
+      Second Action
+    </button>
+    <button  *ngIf="isLoggedIn()" (click)="doLogout()" class="menu-button" mat-menu-item (click)="yourThirdAction()">
+    <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</mat-menu>
+
+
+<mat-menu #profile="matMenu" >
+  <div class="menuItems">
+    <img  [src]="userDetails.imageUrl" [alt]="userDetails.name" height="100px" width="100px" style="margin-left: 30px;"/>
+    <h1 style="font-size: 20px;">{{ userDetails.name }}</h1>
+    <p>{{ userDetails.email }}</p>
+    <button  *ngIf="isLoggedIn()" (click)="doLogout()" class="menu-button" mat-menu-item (click)="yourThirdAction()">
+      <mat-icon>logout</mat-icon>
+      </button>
+  </div>
+</mat-menu>

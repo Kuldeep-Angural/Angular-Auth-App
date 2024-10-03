@@ -1,0 +1,54 @@
+.centered-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full height viewport */
+  background-color: #e9eaec;
+}
+button {
+  cursor: pointer;
+  border-radius: 5px;
+  height: 40px;
+}
+button:hover {
+  filter: brightness(0.9);
+}
+.example-card {
+  width: 400px; /* Set card width */
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+.link-buttn {
+  color: blue;
+  cursor: pointer;
+}
+.divider {
+  text-align: center; /* Center the text inside the paragraph */
+  margin: 10px 0; /* Add some spacing if needed */
+}
+.actionButtons {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+}
+.google-button {
+  background: linear-gradient(90deg, #195ac2b9, #db4537c2, #f4b300db);
+  color: white;
+  height: 30px;
+  width: 120px;
+  margin-right: 10px;
+  border: none; /* Optional: remove button border */
+  border-radius: 4px; /* Optional: add slight rounding to the corners */
+  cursor: pointer; /* Optional: change cursor to pointer on hover */
+  font-weight: bold; /* Optional: make text bold */
+  transition: "background 0.3s;";
+}
+
+.facebook-button {
+  background-color: #3b5998;
+  color: white;
+  height: 30px;
+  width: 120px;
+  margin-left: 10px;
+}
