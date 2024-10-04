@@ -1,12 +1,13 @@
-<h1 mat-dialog-title>{{ data.title }}</h1>
-<div mat-dialog-content>
+<h1 class="mat-dialog-title">
+  {{ data.title }}
+  
+  <button class="close-button" mat-icon-button mat-dialog-close (click)="onClose()" style="position: absolute; right: 0; top: 0;">
+    <mat-icon>close</mat-icon>
+  </button>
+</h1>
+<div class="mat-dialog-content">
   <p>{{ data.content }}</p>
 </div>
-<div mat-dialog-actions>
-  <app-button
-  color="accent"
-  icon="close"
-  (click)="onClose()">
-</app-button>
+<div class="mat-dialog-actions">
  
 </div>

@@ -1,0 +1,12 @@
+<div class="product-view-container">
+    <div class="image-container">
+      <img [src]="filteredProducts.imageSrc" alt="Product Image" class="product-image"/>
+    </div>
+    <div class="content-container">
+      <h2>{{ filteredProducts.title }}</h2>
+      <p>{{ filteredProducts.content }}</p>
+      <p><strong>Price:</strong> {{ filteredProducts.price+ '  rs'}}</p>
+      <!-- Add more product details as needed -->
+    </div>
+  </div>
+  

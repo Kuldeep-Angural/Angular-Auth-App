@@ -11,6 +11,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   if (user) {
     console.log("User found in Storage", user);
+    router.navigate(['/onboarding']); 
     return true;
   } else {
     router.navigate(['/authentication']); 

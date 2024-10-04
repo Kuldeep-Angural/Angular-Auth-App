@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class ButtonComponent {
   @Input() label: string = '';
   @Input() variant: 'basic' | 'raised' | 'flat' | 'icon' | 'stroked' | 'fab' | 'mini-fab' = 'flat';
-  @Input() color: string = ''; // Default to primary color
+  @Input() color: string = '#005CBB'; // Default to primary color
   @Input() disabled: boolean = false; // Disable button property
   @Input() icon: string = ''; // Optional icon
   @Input() iconPosition: 'start' | 'end' = 'start'; // Position of icon
