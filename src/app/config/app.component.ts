@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from '../navbar/navbar.component';
+import { NavbarComponent } from '../components/navbar/navbar.component';
 import { ToasterService } from '../services/toaster.service';
-import { ToasterComponent } from '../toaster/toaster.component';
-import { WrapperComponent } from '../wrapper/wrapper.component';
+import { ToasterComponent } from '../components/toaster/toaster.component';
+import { WrapperComponent } from '../components/wrapper/wrapper.component';
 
 @Component({
   selector: 'app-root',

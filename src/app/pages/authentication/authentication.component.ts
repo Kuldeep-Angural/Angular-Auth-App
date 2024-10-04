@@ -8,13 +8,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { loginAction, SESSION_KEYS } from '../../constants/constant';
-import { InputComponent } from '../../input/input.component';
+import { InputComponent } from '../../components/input/input.component';
 import { Login } from '../../models/Login';
 import { Signup } from '../../models/SignUp';
 import { AuthService } from '../../services/AuthService';
 import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { UtilityService } from '../../services/UtilityService';
 
 @Component({
   selector: 'app-authentication',
@@ -25,6 +26,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AuthenticationComponent {
   authService = new AuthService();
+  utilityService:UtilityService = new UtilityService();
   loginForm: FormGroup;
   signupForm: FormGroup;
   router = inject(Router);
@@ -36,7 +38,7 @@ export class AuthenticationComponent {
   activeForm: 'login' | 'signup' = 'login';
  
 
-  constructor(private fb: FormBuilder, private toasterService: ToasterService, private ngZone: NgZone) {
+  constructor(private fb: FormBuilder, private toasterService: ToasterService, private ngZone: NgZone,) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -101,8 +103,14 @@ export class AuthenticationComponent {
           console.log('User Info:', userInfo);
           localStorage.setItem(SESSION_KEYS.USER, JSON.stringify(userInfo));
           
+          this.toasterService.show('Login Successfull','success');
+         
+          this.utilityService.addDelay(200).then(()=>{
+            this.router.navigate(['/']); 
+          })
+
           // Navigate to the onboarding page after user info retrieval
-          this.router.navigate(['/']); // Redirect to the onboarding page
+
   
           // Handle specific actions based on the login action
           // action === loginAction.GOOGLE 

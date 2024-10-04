@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { StorageService } from '../services/storage.service';
+import { StorageService } from '../../services/storage.service';
 import { Router } from '@angular/router';
 import {MatMenuModule ,MatMenu,MatMenuTrigger } from '@angular/material/menu';
-import { User } from '../models/User';
+import { User } from '../../models/User';
+import { ModalService } from '../../services/ModalService';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -21,13 +22,22 @@ export class NavbarComponent {
   userDetails:User = new User();
 
 
-  constructor(){
+  constructor(private modalService: ModalService){
     const userData = this.storageService.getUser();
     if (userData) {
         this.userDetails.email=userData.email;
         this.userDetails.name=userData.name;
         this.userDetails.imageUrl=userData.picture;
     }
+  }
+
+  openModal() {
+    this.modalService.openModal({
+      title: 'Example Modal',
+      content: 'This is a reusable modal component!',
+    }).subscribe(result => {
+      console.log('Modal closed', result);
+    });
   }
 
 
@@ -42,6 +52,7 @@ export class NavbarComponent {
 
 
   yourFirstAction() {
+    this.openModal()
 
   }
   yourSecondAction() {

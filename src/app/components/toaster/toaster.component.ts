@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ButtonComponent } from "../button/button.component";
 
 
 interface Toast {
@@ -12,7 +12,7 @@ interface Toast {
 @Component({
   selector: 'app-toaster',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './toaster.component.html',
   styleUrl: './toaster.component.css'
 })
