@@ -1,0 +1,50 @@
+
+<mat-toolbar class="toolbar"><div class="heading">
+    <p>Your Will <br>section {{currentCard}} to 8</p>
+</div></mat-toolbar>
+
+
+<div class="card-container"  *ngIf="currentTab==='MENU'" style="display: flex; flex-wrap: wrap; gap: 16px;">
+    <div *ngFor="let card of allCards; let i = index" style="flex: 1 1 calc(50% - 16px);">
+      <app-questionarcard
+        index={{currentCard}}
+        title={{card?.label}}
+        status={{card.status}}
+        [step]="(i + 1).toString()"
+        [isCompleted]="true"
+        buttonLabel="Continue"
+        skipLabel="Skip"
+        infoText="If you don’t own any property you can skip this section"
+        (buttonClick)="handleContinue(card)"
+        (skipClick)="handleSkip(card)"
+      ></app-questionarcard>
+    </div>
+  </div>
+
+
+<div class="personalInfo" class="card-container" *ngIf="currentTab==='PERSONALDETAILS'">
+    <div *ngFor="let question of questions1">
+        <app-input placeholder={{question.placeholder}} type={{question.type}}  />
+        <label>{{question.infoText}}</label>
+    </div>
+</div>
+
+
+
+<div class="personalInfo"  *ngIf="currentTab==='PERSONALDETAILS2'">
+    <div *ngFor="let question of questions2">
+        <label>{{question.label}}</label>
+        <app-input type={{question.type}}  [options]="question.options"  />
+    </div>
+</div>
+
+
+
+<div class="footer-button">
+    <button  class="btn btn-back" (click)="handleBackClick()">back</button>
+    <button class="btn btn-next" (click)="handleNextClick()">next</button>
+</div>
+
+
+
+  

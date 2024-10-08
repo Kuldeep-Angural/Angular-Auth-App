@@ -1,10 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [MatInputModule],
+  imports: [MatInputModule, MatRadioModule,CommonModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -13,13 +16,14 @@ import {MatInputModule} from '@angular/material/input';
     }
   ],
   templateUrl: './input.component.html',
-  styleUrl: './input.component.css'
+  styleUrls: ['./input.component.css']
 })
-export class InputComponent {
+export class InputComponent implements ControlValueAccessor {
   @Input() label: string = '';
-  @Input() type: string = 'text';
+  @Input() type: string = 'text'; // "text" or "radio"
   @Input() placeholder: string = '';
   @Input() disabled: boolean = false;
+  @Input() options: { value: string; label: string; }[] = []; // For radio options
 
   // Internal value to hold the input data
   value: string = '';
@@ -44,9 +48,14 @@ export class InputComponent {
     this.disabled = isDisabled;
   }
 
-  // Called whenever the input value changes
   handleInputChange(event: any): void {
     this.value = event.target.value;
+    this.onChange(this.value);
+    this.onTouched();
+  }
+
+  handleRadioChange(value: string): void {
+    this.value = value;
     this.onChange(this.value);
     this.onTouched();
   }

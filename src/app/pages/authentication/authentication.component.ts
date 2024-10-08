@@ -17,28 +17,27 @@ import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { UtilityService } from '../../services/UtilityService';
 
+
 @Component({
   selector: 'app-authentication',
   standalone: true,
-  imports: [InputComponent, MatDividerModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, CommonModule, MatCardModule, MatButtonModule, MatIconModule,],
+  imports: [InputComponent, MatDividerModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, CommonModule, MatCardModule, MatButtonModule, MatIconModule],
   templateUrl: './authentication.component.html',
   styleUrls: ['./authentication.component.css'],
 })
 export class AuthenticationComponent {
-  authService = new AuthService();
-  utilityService:UtilityService = new UtilityService();
+  utilityService: UtilityService = new UtilityService();
   loginForm: FormGroup;
   signupForm: FormGroup;
   router = inject(Router);
-
 
   popupWidth = 500;
   popupHeight = 600;
 
   activeForm: 'login' | 'signup' = 'login';
- 
 
-  constructor(private fb: FormBuilder, private toasterService: ToasterService, private ngZone: NgZone,) {
+
+  constructor(private fb: FormBuilder,private authService:AuthService, private toasterService: ToasterService, private ngZone: NgZone,) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -68,11 +67,16 @@ export class AuthenticationComponent {
       loginModel.email = this.loginForm.value.email;
       loginModel.password = this.loginForm.value.password;
       console.log('Login:', loginModel);
-      this.authService.login(loginModel).then((response: any) => {
-        console.log(response);
-
+      this.authService.login(loginModel).subscribe({
+        next: (data) => {
+          console.log(data);
+        },
+        error: (error) => {
+          console.error('Error fetching data:', error);
+        }
       })
     }
+
 
     if (this.activeForm === 'signup' && this.signupForm.valid) {
       const signupModel = new Signup();
@@ -81,58 +85,50 @@ export class AuthenticationComponent {
       signupModel.mobile = this.signupForm.value.mobile;
       signupModel.password = this.signupForm.value.password;
       console.log('Signup:', signupModel);
-      this.authService.registerUser(signupModel).then((response: any) => {
-        console.log(response);
 
+      this.authService.registerUser(signupModel).subscribe({
+        next: (data) => {
+          console.log(data);
+        },
+        error: (error) => {
+          console.error('Error fetching data:', error);
+        }
       })
     }
   }
 
-   getUserInfo(accessToken: string, action: string) {
+  getUserInfo(accessToken: string, action: string) {
     const urls = {
       [loginAction.GOOGLE]: 'https://www.googleapis.com/oauth2/v2/userinfo',
       [loginAction.FACEBOOK]: `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email`,
     };
-  
+
     fetch(urls[action], {
       headers: action === loginAction.GOOGLE ? { Authorization: `Bearer ${accessToken}` } : {},
     })
       .then((res) => res.json())
       .then((userInfo) => {
-        this.ngZone.run(() => {
-          console.log('User Info:', userInfo);
-          localStorage.setItem(SESSION_KEYS.USER, JSON.stringify(userInfo));
-          
-          this.toasterService.show('Login Successfull','success');
-         
-          this.utilityService.addDelay(200).then(()=>{
-            this.router.navigate(['/']); 
+        this.ngZone.run(() => {          
+          this.authService.googleAction({ "name": userInfo.name, "googleId": userInfo.id, "email": userInfo.email, "photoUrl": userInfo.picture })
+          .subscribe({
+            next: (data) => {
+              this.toasterService.show(data.message,'success');
+              localStorage.setItem(SESSION_KEYS.USER, JSON.stringify(userInfo));
+              this.utilityService.addDelay(400).then(() => {
+                this.router.navigate(['/']);
+              })
+            },
+            error: (error) => {
+              this.toasterService.show(error.message,'error');
+            }
           })
-
-          // Navigate to the onboarding page after user info retrieval
-
-  
-          // Handle specific actions based on the login action
-          // action === loginAction.GOOGLE 
-          //   ? this.authService.googleAction({
-          //       email: userInfo?.email,
-          //       name: userInfo.name,
-          //       googleId: userInfo.id,
-          //       imageUrl: userInfo.picture
-          //     })
-          //   : this.authService.facebookAction({
-          //       email: userInfo?.email,
-          //       name: userInfo.name,
-          //       facebookId: userInfo.id,
-          //       imageUrl: userInfo.picture
-          //     });
         });
       })
       .catch((error) => {
         console.error('Error fetching user info:', error);
       });
   }
-  
+
 
 
   private handleAuthPopup(popup: Window | null, action: string): void {

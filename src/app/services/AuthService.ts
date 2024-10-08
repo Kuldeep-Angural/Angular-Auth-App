@@ -1,29 +1,37 @@
 import { Injectable } from '@angular/core';
-import axios from 'axios'
 import { environment } from '../../environments/environment';
-
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class AuthService {
-  public baseUrl = environment.BACKEND_HOST+'/Auth'
+    public apiUrl = environment.BACKEND_HOST + '/Auth'
 
+    constructor(private http: HttpClient) { }
 
-  googleAction(credentials: any) {
-    return axios.post(this.baseUrl + '/google', credentials)
+  fetchData(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
   }
 
-  facebookAction(credentials: any) {
-    return axios.post(this.baseUrl + '/faceBook', credentials)
+  googleAction(credentials: Record<string, any>): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/google/login`, credentials);
   }
 
-  registerUser(credentials:any){
-    return axios.post(this.baseUrl + '/register', credentials)
+  facebookAction(credentials: Record<string, any>): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/facebook`, credentials);
   }
-  
-  login(credentials:any){
-    return axios.post(this.baseUrl + '/login', credentials)
+
+  registerUser(credentials: Record<string, any>): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/register`, credentials);
+  }
+
+  login(credentials: Record<string, any>): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: credentials
+    };
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials);
   }
 }

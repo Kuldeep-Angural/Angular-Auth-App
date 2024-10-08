@@ -26,6 +26,10 @@
 }
 
 
+app-questionareform{
+  min-width: 100%;
+}
+
 
 .product-view-container {
   display: flex;

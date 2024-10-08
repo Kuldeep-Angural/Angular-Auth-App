@@ -4,8 +4,8 @@
   </button>
   <span class="example-spacer"></span>
   
-  <button *ngIf="isLoggedIn()" mat-icon-button class="example-icon" [matMenuTriggerFor]="profile"  aria-label="Example icon-button with share icon">
-    <mat-icon>person</mat-icon>
+  <button *ngIf="isLoggedIn()" (click)="doLogout()" mat-icon-button class="example-icon"   aria-label="Example icon-button with share icon">
+      <mat-icon>logout</mat-icon>
   </button>
 </mat-toolbar>
 
@@ -24,7 +24,7 @@
 </mat-menu>
 
 
-<mat-menu #profile="matMenu" >
+<!-- <mat-menu #profile="matMenu" >
   <div class="menuItems">
     <img  [src]="userDetails.imageUrl" [alt]="userDetails.name" height="100px" width="100px" style="margin-left: 30px;"/>
     <h1 style="font-size: 20px;">{{ userDetails.name }}</h1>
@@ -32,5 +32,5 @@
     <button  *ngIf="isLoggedIn()" (click)="doLogout()" class="menu-button" mat-menu-item (click)="yourThirdAction()">
       <mat-icon>logout</mat-icon>
       </button>
-  </div>
-</mat-menu>
+  </div> -->
+<!-- </mat-menu> -->
