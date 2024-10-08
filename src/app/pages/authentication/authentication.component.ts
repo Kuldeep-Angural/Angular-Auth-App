@@ -16,6 +16,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { UtilityService } from '../../services/UtilityService';
+import { ProgressbarService } from '../../services/ProgressbarService';
 
 
 @Component({
@@ -31,13 +32,17 @@ export class AuthenticationComponent {
   signupForm: FormGroup;
   router = inject(Router);
 
+
   popupWidth = 500;
   popupHeight = 600;
 
   activeForm: 'login' | 'signup' = 'login';
 
 
-  constructor(private fb: FormBuilder,private authService:AuthService, private toasterService: ToasterService, private ngZone: NgZone,) {
+  
+
+
+  constructor(private fb: FormBuilder,private authService:AuthService, private toasterService: ToasterService, private ngZone: NgZone,private progressService: ProgressbarService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
@@ -52,6 +57,18 @@ export class AuthenticationComponent {
   }
 
   changeForm(form: 'signup' | 'login'): void { this.activeForm = form }
+
+  showLoading() {
+    this.progressService.showProgressBar('indeterminate');
+  }
+
+  hideLoading() {
+    this.progressService.hideProgressBar();
+  }
+
+  showDeterminateLoading() {
+    this.progressService.showProgressBar('determinate', 50);
+  }
 
 
   getPopupFeatures(): string {
@@ -103,6 +120,7 @@ export class AuthenticationComponent {
       [loginAction.FACEBOOK]: `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,name,email`,
     };
 
+    this.progressService.showProgressBar('indeterminate')
     fetch(urls[action], {
       headers: action === loginAction.GOOGLE ? { Authorization: `Bearer ${accessToken}` } : {},
     })
@@ -112,14 +130,21 @@ export class AuthenticationComponent {
           this.authService.googleAction({ "name": userInfo.name, "googleId": userInfo.id, "email": userInfo.email, "photoUrl": userInfo.picture })
           .subscribe({
             next: (data) => {
-              this.toasterService.show(data.message,'success');
-              localStorage.setItem(SESSION_KEYS.USER, JSON.stringify(userInfo));
-              this.utilityService.addDelay(400).then(() => {
-                this.router.navigate(['/']);
-              })
+              console.log(data);
+              
+              localStorage.setItem(SESSION_KEYS.USER, JSON.stringify(data.user));
             },
             error: (error) => {
               this.toasterService.show(error.message,'error');
+              this.progressService.hideProgressBar();
+
+            },
+            complete:()=>{
+              this.utilityService.addDelay(2000).then(() => {
+                this.router.navigate(['/']);
+                this.toasterService.show('Login Successful','success');
+                this.progressService.hideProgressBar();
+              })
             }
           })
         });

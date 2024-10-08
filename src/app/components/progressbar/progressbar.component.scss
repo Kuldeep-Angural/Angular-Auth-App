@@ -1,0 +1,23 @@
+/* progress-bar.component.css */
+:host {
+    display: block;
+  }
+  
+  .overlay {
+    position: fixed; /* Fixed positioning to overlay on the entire screen */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background: rgba(255, 255, 255, 0.8); /* Light background with some opacity */
+    backdrop-filter: blur(5px); /* Blur effect */
+    display: flex; /* Flexbox to center align the content */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    z-index: 1000; /* Ensure it's on top of other elements */
+  }
+  
+  .progress-bar {
+    width: 50%; /* Optional: Control width of the progress bar */
+  }
+  
